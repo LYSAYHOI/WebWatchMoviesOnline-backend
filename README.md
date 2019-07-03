@@ -1,1 +1,1 @@
-# WebWatchMoviesOnline-backend
+using command-line command #mvn spring-boot:run to run the project

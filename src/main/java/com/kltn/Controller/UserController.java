@@ -2,6 +2,8 @@ package com.kltn.Controller;
 
 import javax.validation.Valid;
 
+import com.kltn.DTO.ChangePasswordForm;
+import com.kltn.Model.User;
 import com.kltn.Service.IFilmService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ import com.kltn.DTO.SignUpForm;
 import com.kltn.DTO.jwtResponse;
 import com.kltn.DTO.loginForm;
 import com.kltn.Service.IUserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -39,7 +44,7 @@ public class UserController {
 	private JwtProvider jwtProvider;
 
 
-	@PostMapping("/login")
+	@PostMapping("login")
 	@CrossOrigin
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody loginForm loginRequest) {
 
@@ -68,7 +73,7 @@ public class UserController {
 		if(userService.signUp(user)) {
 			return new ResponseEntity<String>("{\"result\":\"Sign up successfully\"}", HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("{\"result\":\"Sign up failed\"}", HttpStatus.PRECONDITION_FAILED);
+		return new ResponseEntity<String>("{\"result\":\"Sign up failed\"}", HttpStatus.OK);
 	}
 
 	@GetMapping("like")
@@ -79,10 +84,65 @@ public class UserController {
 			Claims claims = jwtProvider.decodeToken(token.substring(7));
 			if(userService.likeFilm(claims.getSubject(), filmId)){
 				return new ResponseEntity<String>("{\"viewcount\":\""+filmService.updateViewProperties(filmId)+"\"}", HttpStatus.OK);
-			} return new ResponseEntity<String>("{\"result\":\"like film failure\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+			} return new ResponseEntity<String>("{\"result\":\"like film failure\"}", HttpStatus.OK);
 		}catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>("{\"result\":\"like film failure\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("{\"result\":\"like film failure\"}", HttpStatus.OK);
 		}
+	}
+
+	@GetMapping("blockuser")
+	@CrossOrigin
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<?> blockUser(@RequestParam String username) {
+		if(userService.blockuser(username)) {
+			return new ResponseEntity<String>("{\"result\":\"block user successfully\"}", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("{\"result\":\"block user failed\"}", HttpStatus.OK);
+	}
+
+	@GetMapping("getalluser")
+	@CrossOrigin
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<?> getAllUser(@RequestParam int pageindex, @RequestParam int pagesize) {
+		try {
+			List<User> listUser = userService.getAllUser(pageindex, pagesize);
+			for(int i=0; i<listUser.size(); i++) {
+				listUser.get(i).setPassword(null);
+				listUser.get(i).setRoles(null);
+				listUser.get(i).setLikedFilm(null);
+			}
+			return new ResponseEntity<>(listUser, HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+		}
+	}
+
+	@PostMapping("changepassword")
+	@CrossOrigin
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<?> changePassword(@RequestHeader(value = "Authorization") String token, @RequestBody ChangePasswordForm changePasswordForm) {
+		Claims claims = jwtProvider.decodeToken(token.substring(7));
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						claims.getSubject(),
+						changePasswordForm.getOldPassword()
+				)
+		);
+		if(userService.changePassword(claims.getSubject(), changePasswordForm.getNewPassword())){
+			return new ResponseEntity<>("{\"result\":\"success\"}", HttpStatus.OK);
+		} return new ResponseEntity<>("{\"result\":\"fail\"}", HttpStatus.OK);
+	}
+
+	@PostMapping("changeinfo")
+	@CrossOrigin
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<?> changeInfo(@RequestHeader(value = "Authorization") String token, @RequestBody SignUpForm user) {
+		System.out.println("--------------------------------------------------------------"+user.getBirthday());
+		System.out.println("--------------------------------------------------------------"+user.isMale());
+		Claims claims = jwtProvider.decodeToken(token.substring(7));
+		if(userService.changeInfo(claims.getSubject(), user)){
+			return new ResponseEntity<>("{\"result\":\"success\"}", HttpStatus.OK);
+		} return new ResponseEntity<>("{\"result\":\"fail\"}", HttpStatus.OK);
 	}
 }

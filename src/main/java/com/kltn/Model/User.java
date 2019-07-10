@@ -1,6 +1,8 @@
 package com.kltn.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -32,6 +34,9 @@ public class User {
 	
 	@Column
 	private LocalDate birthday;
+
+	@Column
+	private boolean isBlocked = false;
 
 	@ManyToMany
 	@JoinTable(
@@ -125,5 +130,13 @@ public class User {
 
 	public void setLikedFilm(Set<Film> likedFilm) {
 		this.likedFilm = likedFilm;
+	}
+
+	public boolean isBlocked() {
+		return isBlocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		isBlocked = blocked;
 	}
 }

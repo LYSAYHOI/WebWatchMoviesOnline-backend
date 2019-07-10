@@ -44,10 +44,10 @@ public class EpisodeController {
 			if(pair.getSecond().toLowerCase().equals("success")) {
 				return new ResponseEntity<Episode>(pair.getFirst(), HttpStatus.OK);
 			}
-			return new ResponseEntity<String>("{\"result\":\" "+pair.getSecond()+" \"}", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<String>("{\"result\":\" "+pair.getSecond()+" \"}", HttpStatus.OK);
 		}catch (Exception ex){
 			ex.printStackTrace();
-			return new ResponseEntity<String>("{\"result\":\" Unrecognized error \"}", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("{\"result\":\" Unrecognized error \"}", HttpStatus.OK);
 		}
 	}
 
@@ -60,10 +60,10 @@ public class EpisodeController {
 			if(pair.getSecond().toLowerCase().equals("success")) {
 				return new ResponseEntity<Episode>(pair.getFirst(), HttpStatus.OK);
 			}
-			return new ResponseEntity<String>("{\"result\":\" "+pair.getSecond()+" \"}", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<String>("{\"result\":\" "+pair.getSecond()+" \"}", HttpStatus.OK);
 		}catch (Exception ex){
 			//ex.printStackTrace();
-			return new ResponseEntity<String>("{\"result\":\" "+ex.getMessage()+" \"}", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("{\"result\":\" "+ex.getMessage()+" \"}", HttpStatus.OK);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class EpisodeController {
 		try {
 			return new ResponseEntity<String>("{\"viewcount\":\" "+episodeService.addView(episodeId)+" \"}", HttpStatus.OK);
 		}catch (Exception ex){
-			return new ResponseEntity<String>("{\"result\":\" "+ex.getMessage()+" \"}", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("{\"result\":\" "+ex.getMessage()+" \"}", HttpStatus.OK);
 		}
 	}
 

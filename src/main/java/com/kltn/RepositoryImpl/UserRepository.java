@@ -16,6 +16,7 @@ import com.kltn.Repository.IUserRepository;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -89,6 +90,58 @@ public class UserRepository implements IUserRepository{
 			entityManager.flush();
 			return true;
 		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean blockuser(String username){
+		try {
+			User user = getUser(username);
+			user.setBlocked(true);
+			entityManager.merge(user);
+			return true;
+		}catch (Exception e){
+			return false;
+		}
+	}
+
+	@Override
+	public List<User> getAllUser(int pageindex, int pagesize) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<User> query = cb.createQuery(User.class);
+		Root<User> root = query.from(User.class);
+		List<User> listUser = entityManager.createQuery(query)
+				.setMaxResults(pagesize)
+				.setFirstResult((pageindex)*pagesize)
+				.getResultList();
+		return listUser;
+	}
+
+	@Override
+	public boolean changePassword(String username, String newPassword) {
+		try {
+			User user = getUser(username);
+			user.setPassword(newPassword);
+			entityManager.merge(user);
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean changeInfo(String username, User editedUser) {
+		try {
+			User user = getUser(username);
+			user.setName(editedUser.getName());
+			user.setEmail(editedUser.getEmail());
+			user.setMale(editedUser.isMale());
+			user.setBirthday(editedUser.getBirthday());
+			entityManager.merge(user);
+			return true;
+		}catch (Exception e){
 			e.printStackTrace();
 			return false;
 		}

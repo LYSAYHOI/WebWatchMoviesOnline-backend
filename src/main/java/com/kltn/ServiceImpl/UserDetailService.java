@@ -20,6 +20,9 @@ public class UserDetailService implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = accountRepository.getUser(username);
+		if(user.isBlocked()){
+			user = null;
+		}
 		return UserPrinciple.build(user);
 	}
 

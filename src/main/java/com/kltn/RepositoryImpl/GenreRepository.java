@@ -1,5 +1,6 @@
 package com.kltn.RepositoryImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -22,11 +23,16 @@ public class GenreRepository implements IGenreRepository{
 	
 	@Override
 	public List<Genre> listGenre() {
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Genre> query = builder.createQuery(Genre.class);
-		Root<Genre> root = query.from(Genre.class);
-		query.select(root);
- 		return entityManager.createQuery(query).getResultList();
+		try {
+			CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Genre> query = builder.createQuery(Genre.class);
+			Root<Genre> root = query.from(Genre.class);
+			query.select(root);
+			return entityManager.createQuery(query).getResultList();
+		}catch (Exception e){
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 	}
 
 	@Override
@@ -58,9 +64,6 @@ public class GenreRepository implements IGenreRepository{
 	@Override
 	public boolean editGenre(Genre genre) {
 		try {
-//			Genre editingGenre = getGenre(genre.getGenreId());
-//			editingGenre.setGenreName(genre.getGenreName());
-//			editingGenre.setGenreDescription(genre.getGenreDescription());
 			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 			CriteriaUpdate<Genre> query = cb.createCriteriaUpdate(Genre.class);
 			Root<Genre> root = query.from(Genre.class);

@@ -73,7 +73,7 @@ public class EpisodeRepository implements IEpisodeRepository{
 	public Pair<Episode,String> editEpisode(Episode newEp){
 		try {
 
-			Pair<Episode, String> getedepisode = getAnEpisodeById(newEp.getFilm().getFilmId());
+			Pair<Episode, String> getedepisode = getAnEpisodeById(newEp.getEpisodeId());
 			if(getedepisode.getSecond().toLowerCase().equals("success")){
 				Episode editEpisode = getedepisode.getFirst();
 				editEpisode.setEpisodeName(newEp.getEpisodeName());

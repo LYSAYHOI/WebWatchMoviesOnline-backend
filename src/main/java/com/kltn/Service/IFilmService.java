@@ -18,5 +18,6 @@ public interface IFilmService {
 	public FilmAndLength getAllFilm(int pageNumber, int pageSize);
 	public boolean editFilm(Film film);
 	public int updateViewProperties(int filmId);
+	public List<Film> getFilmByGenre(int genreId, int pagesize);
 
 }

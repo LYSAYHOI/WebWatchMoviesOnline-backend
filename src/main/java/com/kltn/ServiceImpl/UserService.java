@@ -16,6 +16,7 @@ import com.kltn.Service.IUserService;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -72,5 +73,34 @@ public class UserService implements IUserService{
 	@Transactional
 	public boolean likeFilm(String username, int filmId) {
 		return userRepository.likeFilm(username, filmId);
+	}
+
+	@Transactional
+	public boolean blockuser(String username){
+		return userRepository.blockuser(username);
+	}
+
+	@Transactional
+	public List<User> getAllUser(int pageindex, int pagesize) {
+		return userRepository.getAllUser(pageindex, pagesize);
+	}
+
+	@Transactional
+	public boolean changePassword(String username, String newPassword) {
+		return userRepository.changePassword(username, pe.encode(newPassword));
+	}
+
+	@Transactional
+	public boolean changeInfo(String username, SignUpForm editedUser) {
+		if(editedUser.getName().equals("") || editedUser.getName() == null ||
+				editedUser.getEmail().equals("") || editedUser.getEmail() == null ||
+				editedUser.getBirthday() == null)
+			return false;
+		User user = new User();
+		user.setBirthday(editedUser.getBirthday());
+		user.setEmail(editedUser.getEmail());
+		user.setMale(editedUser.isMale());
+		user.setName(editedUser.getName());
+		return userRepository.changeInfo(username, user);
 	}
 }

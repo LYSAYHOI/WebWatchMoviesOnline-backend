@@ -41,7 +41,7 @@ public class GenreController {
 				return new ResponseEntity<String>("{\"result\":\"add genre fail\"}", HttpStatus.OK);
 			}
 		}catch (Exception e) {
-			return new ResponseEntity<String>("{\"result\":\"un-recognize error\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("{\"result\":\"un-recognize error\"}", HttpStatus.OK);
 		}
 	}
 	
@@ -57,7 +57,7 @@ public class GenreController {
 				return new ResponseEntity<String>("{\"result\":\"edit genre fail\"}", HttpStatus.OK);
 			}
 		}catch (Exception e) {
-			return new ResponseEntity<String>("{\"result\":\"un-recognize error\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>("{\"result\":\"un-recognize error\"}", HttpStatus.OK);
 		}
 	}
 }

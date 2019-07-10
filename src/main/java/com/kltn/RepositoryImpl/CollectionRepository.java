@@ -69,4 +69,12 @@ public class CollectionRepository implements ICollectionRepository {
                 .getResultList();
     }
 
+    @Override
+    public List<Film> search(String keyword) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Film> query = cb.createQuery(Film.class);
+        Root root = query.from(Film.class);
+        query.where(cb.like(root.get("filmName"), "%"+keyword+"%"));
+        return entityManager.createQuery(query).getResultList();
+    }
 }

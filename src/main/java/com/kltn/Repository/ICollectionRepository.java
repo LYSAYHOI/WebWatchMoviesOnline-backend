@@ -12,4 +12,5 @@ public interface ICollectionRepository {
     public List<Film> newFilm();
     public List<User> likedFilm(User user, int pagesize);
     public List<Film> mostViewFilm(int pagesize);
+    public List<Film> search(String keyword);
 }

@@ -25,7 +25,7 @@ public class FilmController {
         if(film != null){
             return new ResponseEntity<Film>(film, HttpStatus.OK);
         }
-        return new ResponseEntity<String>("{\"result\":\"no film found\"}", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>("{\"result\":\"no film found\"}", HttpStatus.OK);
     }
 
     @PostMapping("add")
@@ -36,7 +36,7 @@ public class FilmController {
         if(filmAdded != null){
             return new ResponseEntity<Film>(filmAdded, HttpStatus.OK);
         }
-        return new ResponseEntity<String>("{\"result\":\"add film fail\"}", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>("{\"result\":\"add film fail\"}", HttpStatus.OK);
     }
 
     @GetMapping("getall")
@@ -46,7 +46,7 @@ public class FilmController {
         if(filmAndLength.getFilm().size() != 0){
             return new ResponseEntity<FilmAndLength>(filmAndLength, HttpStatus.OK);
         }
-        return new ResponseEntity<String>("{\"result\":\"no film found\"}", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>("{\"result\":\"no film found\"}", HttpStatus.OK);
     }
 
     @PostMapping("edit")
@@ -57,7 +57,19 @@ public class FilmController {
         if(result){
             return new ResponseEntity<String>("{\"result\":\"edit film success\"}", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("{\"result\":\"edit film fail\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<String>("{\"result\":\"edit film fail\"}", HttpStatus.OK);
+    }
+
+    @GetMapping("byGenre")
+    @CrossOrigin
+    public ResponseEntity<?> getFilmByGenre(@RequestParam int genreId, @RequestParam int pagesize) {
+        try {
+            List<Film> listFilm = filmService.getFilmByGenre(genreId, pagesize);
+            return new ResponseEntity<List<Film>>(listFilm, HttpStatus.OK);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<String>("{\"result\":\"" +e.getMessage()+ "\"}", HttpStatus.OK);
+        }
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -52,5 +53,16 @@ public class CollectionController {
     public ResponseEntity<?> mostViewFilm(@RequestParam int pagesize){
         List<Film> newEp = collectionService.mostViewFilm(pagesize);
         return new ResponseEntity<List>(newEp, HttpStatus.OK);
+    }
+
+    @GetMapping("search")
+    @CrossOrigin
+    public ResponseEntity<?> search(@RequestParam String keyword){
+        try {
+            List<Film> newEp = collectionService.search(keyword);
+            return new ResponseEntity<List>(newEp, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<List>(new ArrayList(), HttpStatus.OK);
+        }
     }
 }

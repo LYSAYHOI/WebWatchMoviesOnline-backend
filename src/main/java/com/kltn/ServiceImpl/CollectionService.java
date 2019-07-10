@@ -42,4 +42,9 @@ public class CollectionService implements ICollectionService {
     public List<Film> mostViewFilm(int pagesize) {
         return collectionRepository.mostViewFilm(pagesize);
     }
+
+    @Override
+    public List<Film> search(String keyword) {
+        return collectionRepository.search(keyword);
+    }
 }

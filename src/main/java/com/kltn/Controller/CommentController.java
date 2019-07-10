@@ -32,12 +32,12 @@ public class CommentController {
             Claims claims = jwtProvider.decodeToken(token.substring(7));
             Pair<Comment, String> result = commentService.addComment(comment.getCommentContent(), claims.getSubject(), comment.getFilm());
             if (result.getFirst() == null) {
-                return new ResponseEntity<String>("{\"result\":\" " + result.getSecond() + " \"}", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<String>("{\"result\":\" " + result.getSecond() + " \"}", HttpStatus.OK);
             }
             return new ResponseEntity<Comment>( result.getFirst(), HttpStatus.OK);
         } catch(Exception e) {
             //e.printStackTrace();
-            return new ResponseEntity<String>("{\"result\":\" Unrecognized error \"}", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("{\"result\":\" Unrecognized error \"}", HttpStatus.OK);
         }
     }
 
@@ -48,7 +48,7 @@ public class CommentController {
             return new ResponseEntity<List<CommentDTO>>(commentService.getComment(filmId, pagesize), HttpStatus.OK);
         }catch(Exception ex) {
             ex.getMessage();
-            return new ResponseEntity<List<CommentDTO>>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<List<CommentDTO>>(new ArrayList<>(), HttpStatus.OK);
         }
     }
 }

@@ -12,5 +12,6 @@ public interface ICollectionService {
     public List<Film> newFilm();
     public List<User> likedFilm(String username, int pagesize);
     public List<Film> mostViewFilm(int pagesize);
+    public List<Film> search(String keyword);
 
 }

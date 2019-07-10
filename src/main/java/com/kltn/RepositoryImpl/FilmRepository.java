@@ -6,14 +6,11 @@ import com.kltn.Repository.IFilmRepository;
 import com.kltn.Utilities.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Repository
@@ -65,7 +62,7 @@ public class FilmRepository implements IFilmRepository {
                     .getResultList();
         } catch (Exception e) {
             System.out.println(e);
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -126,8 +123,9 @@ public class FilmRepository implements IFilmRepository {
         try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<Film> query = cb.createQuery(Film.class);
-            Root root = query.from(Film.class);
-            query.where(cb.equal(root.get("genre").get("genreId"), genreId));
+            Root root = query.from(Genre.class);
+            query.select(root.get("film"));
+            query.where(cb.equal(root.get("genreId"), genreId));
             return entityManager.createQuery(query)
                     .setFirstResult(0)
                     .setMaxResults(pagesize)

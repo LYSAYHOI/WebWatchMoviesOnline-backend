@@ -43,4 +43,9 @@ public class FilmService implements IFilmService {
     public int updateViewProperties(int filmId) {
         return filmRepository.updateViewProperties(filmId);
     }
+
+    @Override
+    public List<Film> getFilmByGenre(int genreId, int pagesize) {
+        return filmRepository.getFilmByGenre(genreId, pagesize);
+    }
 }
